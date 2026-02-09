@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply antialiased;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-400 rounded-full hover:bg-slate-500;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  @apply backdrop-blur-md bg-white/30 border border-white/20 rounded-lg;
+}
+
+/* Badge styling */
+.badge-success {
+  @apply bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold;
+}
+
+.badge-warning {
+  @apply bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-semibold;
+}
+
+.badge-danger {
+  @apply bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold;
+}
+
+/* Button base styling */
+.btn-base {
+  @apply px-4 py-2 rounded-lg font-semibold transition-smooth duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply btn-base bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500;
+}
+
+.btn-secondary {
+  @apply btn-base bg-slate-200 text-slate-700 hover:bg-slate-300 focus:ring-slate-500;
+}
+
+.btn-danger {
+  @apply btn-base bg-red-500 text-white hover:bg-red-600 focus:ring-red-500;
+}
+
+/* Card styling */
+.card {
+  @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-smooth p-6;
+}
+
+.card-elevated {
+  @apply card shadow-lg;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
