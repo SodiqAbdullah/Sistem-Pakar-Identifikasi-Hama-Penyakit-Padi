@@ -233,8 +233,12 @@ export default function Home() {
     setPrediction(null);
     setDiagnosisResult(null);
     setError(null);
+    setLoading(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+      // Reset file input to allow selecting the same file again
+      fileInputRef.current.type = 'text';
+      fileInputRef.current.type = 'file';
     }
   };
 

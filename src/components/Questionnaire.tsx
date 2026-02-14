@@ -12,9 +12,9 @@ interface QuestionnaireProps {
 
 export default function Questionnaire({ diseaseInfo, onSubmit }: QuestionnaireProps) {
   const [answers, setAnswers] = useState<UserAnswers>({
-    question1: 0,
-    question2: 0,
-    question3: 0,
+    question1: null as any,
+    question2: null as any,
+    question3: null as any,
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -35,7 +35,7 @@ export default function Questionnaire({ diseaseInfo, onSubmit }: QuestionnairePr
       return;
     }
 
-    if (answers.question1 === 0 || answers.question2 === 0 || answers.question3 === 0) {
+    if (answers.question1 === null || answers.question2 === null || answers.question3 === null) {
       alert('Silakan jawab semua pertanyaan terlebih dahulu.');
       return;
     }
@@ -80,71 +80,82 @@ export default function Questionnaire({ diseaseInfo, onSubmit }: QuestionnairePr
         </motion.div>
 
         <div className="space-y-6">
-          {diseaseInfo.validation_questions.map((question, index) => {
-            const questionKey = `question${index + 1}` as 'question1' | 'question2' | 'question3';
-            const isAnswered = answers[questionKey] !== 0;
+          {diseaseInfo.validation_questions.length === 0 ? (
+            <motion.div
+              variants={itemVariants}
+              className="bg-green-50 border border-green-200 rounded-lg p-6 text-center"
+            >
+              <p className="text-green-800 font-medium">
+                Tanaman ini dalam kondisi sehat. Tidak perlu validasi lebih lanjut.
+              </p>
+            </motion.div>
+          ) : (
+            diseaseInfo.validation_questions.map((question, index) => {
+              const questionKey = `question${index + 1}` as 'question1' | 'question2' | 'question3';
+              const isAnswered = answers[questionKey] !== null;
 
-            return (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="border border-slate-300 rounded-lg p-6 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-semibold">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-slate-900 font-medium mb-4">{question}</p>
-
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => handleAnswerChange(questionKey, 0)}
-                        className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
-                          answers[questionKey] === 0
-                            ? 'bg-slate-300 text-slate-900'
-                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                        }`}
-                      >
-                        Tidak Yakin
-                      </button>
-                      <button
-                        onClick={() => handleAnswerChange(questionKey, 50)}
-                        className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
-                          answers[questionKey] === 50
-                            ? 'bg-yellow-300 text-yellow-900'
-                            : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
-                        }`}
-                      >
-                        Agak Yakin
-                      </button>
-                      <button
-                        onClick={() => handleAnswerChange(questionKey, 100)}
-                        className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
-                          answers[questionKey] === 100
-                            ? 'bg-green-500 text-white'
-                            : 'bg-green-100 text-green-700 hover:bg-green-200'
-                        }`}
-                      >
-                        Sangat Yakin
-                      </button>
+              return (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className="border border-slate-300 rounded-lg p-6 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-semibold">
+                      {index + 1}
                     </div>
+                    <div className="flex-1">
+                      <p className="text-slate-900 font-medium mb-4">{question}</p>
 
-                    {isAnswered && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="mt-3 flex items-center gap-2 text-green-600 text-sm"
-                      >
-                        <Check size={16} />
-                        <span>Jawaban Tercatat</span>
-                      </motion.div>
-                    )}
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => handleAnswerChange(questionKey, 25)}
+                          className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
+                            answers[questionKey] === 25
+                              ? 'bg-orange-400 text-white'
+                              : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+                          }`}
+                        >
+                          Tidak Yakin
+                        </button>
+                        <button
+                          onClick={() => handleAnswerChange(questionKey, 50)}
+                          className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
+                            answers[questionKey] === 50
+                              ? 'bg-yellow-300 text-yellow-900'
+                              : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                          }`}
+                        >
+                          Agak Yakin
+                        </button>
+                        <button
+                          onClick={() => handleAnswerChange(questionKey, 100)}
+                          className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
+                            answers[questionKey] === 100
+                              ? 'bg-green-500 text-white'
+                              : 'bg-green-100 text-green-700 hover:bg-green-200'
+                          }`}
+                        >
+                          Sangat Yakin
+                        </button>
+                      </div>
+
+                      {isAnswered && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="mt-3 flex items-center gap-2 text-green-600 text-sm"
+                        >
+                          <Check size={16} />
+                          <span>Jawaban Tercatat</span>
+                        </motion.div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
+                </motion.div>
+              );
+            })
+          )}
         </div>
 
         <motion.button

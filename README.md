@@ -1,4 +1,7 @@
 # 🌾 Sistem Pakar Identifikasi Hama & Penyakit Padi
+sistem-pakar-identifikasi-hama-penyakit-padi
+
+
 
 Aplikasi web berbasis AI untuk mengidentifikasi hama dan penyakit tanaman padi secara akurat menggunakan teknologi Machine Learning. Aplikasi berjalan sepenuhnya di sisi klien (client-side), dapat di-deploy secara gratis di Vercel, dan dirancang untuk memberikan diagnosis komprehensif dengan solusi penanganan yang detail.
 
