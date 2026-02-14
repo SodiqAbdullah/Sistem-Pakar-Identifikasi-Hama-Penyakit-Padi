@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { KNNInfo } from '@/types';
+import KNNScatterPlot from './KNNScatterPlot';
 
 interface KNNClusteringDiagramProps {
   knnInfo: KNNInfo;
@@ -129,6 +130,9 @@ export default function KNNClusteringDiagram({ knnInfo, predictedClass, imagePre
           );
         })}
       </motion.div>
+
+      {/* KNN Clustering Visualization */}
+      <KNNScatterPlot knnInfo={knnInfo} />
 
       {/* Voting Result */}
       <motion.div
