@@ -112,46 +112,64 @@ export const initializeKNNClassifier = (): KNNClassifier => {
   knn.addTrainingPoint('Healthy_Plant', [0.85, 0.02, 0.03, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01]);
   knn.addTrainingPoint('Healthy_Plant', [0.90, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01]);
   knn.addTrainingPoint('Healthy_Plant', [0.80, 0.03, 0.04, 0.03, 0.03, 0.03, 0.02, 0.01, 0.01]);
+  knn.addTrainingPoint('Healthy_Plant', [0.88, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01, 0.00]);
+  knn.addTrainingPoint('Healthy_Plant', [0.82, 0.03, 0.03, 0.03, 0.03, 0.02, 0.02, 0.01, 0.01]);
 
   // BLB (Bacterial Leaf Blight)
   knn.addTrainingPoint('BLB', [0.05, 0.80, 0.03, 0.05, 0.02, 0.02, 0.02, 0.01, 0.00]);
   knn.addTrainingPoint('BLB', [0.02, 0.85, 0.04, 0.03, 0.02, 0.02, 0.01, 0.01, 0.00]);
   knn.addTrainingPoint('BLB', [0.03, 0.75, 0.05, 0.05, 0.03, 0.03, 0.03, 0.02, 0.01]);
+  knn.addTrainingPoint('BLB', [0.04, 0.82, 0.03, 0.04, 0.02, 0.02, 0.02, 0.01, 0.00]);
+  knn.addTrainingPoint('BLB', [0.03, 0.78, 0.05, 0.06, 0.03, 0.02, 0.02, 0.01, 0.00]);
 
   // BPH (Brown Plant Hopper)
   knn.addTrainingPoint('BPH', [0.04, 0.03, 0.80, 0.05, 0.02, 0.03, 0.02, 0.01, 0.00]);
   knn.addTrainingPoint('BPH', [0.02, 0.05, 0.85, 0.03, 0.02, 0.02, 0.01, 0.00, 0.00]);
   knn.addTrainingPoint('BPH', [0.03, 0.04, 0.75, 0.06, 0.03, 0.04, 0.03, 0.01, 0.01]);
+  knn.addTrainingPoint('BPH', [0.03, 0.04, 0.82, 0.04, 0.02, 0.03, 0.01, 0.01, 0.00]);
+  knn.addTrainingPoint('BPH', [0.04, 0.06, 0.78, 0.05, 0.03, 0.02, 0.01, 0.01, 0.00]);
 
   // Brown Spot
   knn.addTrainingPoint('Brown_Spot', [0.05, 0.05, 0.04, 0.80, 0.02, 0.02, 0.01, 0.01, 0.00]);
   knn.addTrainingPoint('Brown_Spot', [0.03, 0.04, 0.03, 0.85, 0.02, 0.02, 0.01, 0.00, 0.00]);
   knn.addTrainingPoint('Brown_Spot', [0.04, 0.06, 0.05, 0.75, 0.03, 0.03, 0.02, 0.01, 0.01]);
+  knn.addTrainingPoint('Brown_Spot', [0.04, 0.05, 0.04, 0.82, 0.02, 0.02, 0.01, 0.00, 0.00]);
+  knn.addTrainingPoint('Brown_Spot', [0.05, 0.06, 0.05, 0.77, 0.03, 0.02, 0.01, 0.01, 0.00]);
 
   // False Smut
   knn.addTrainingPoint('False_Smut', [0.03, 0.03, 0.02, 0.02, 0.80, 0.05, 0.03, 0.01, 0.01]);
   knn.addTrainingPoint('False_Smut', [0.02, 0.02, 0.01, 0.02, 0.85, 0.04, 0.02, 0.01, 0.01]);
   knn.addTrainingPoint('False_Smut', [0.04, 0.04, 0.03, 0.03, 0.75, 0.05, 0.03, 0.02, 0.01]);
+  knn.addTrainingPoint('False_Smut', [0.03, 0.03, 0.02, 0.02, 0.82, 0.04, 0.03, 0.01, 0.00]);
+  knn.addTrainingPoint('False_Smut', [0.02, 0.02, 0.02, 0.03, 0.78, 0.05, 0.03, 0.02, 0.01]);
 
   // Hispa
   knn.addTrainingPoint('Hispa', [0.05, 0.02, 0.03, 0.02, 0.02, 0.80, 0.03, 0.02, 0.01]);
   knn.addTrainingPoint('Hispa', [0.03, 0.03, 0.02, 0.02, 0.02, 0.85, 0.02, 0.01, 0.00]);
   knn.addTrainingPoint('Hispa', [0.04, 0.04, 0.04, 0.03, 0.03, 0.75, 0.03, 0.02, 0.02]);
+  knn.addTrainingPoint('Hispa', [0.04, 0.02, 0.03, 0.02, 0.02, 0.82, 0.03, 0.01, 0.01]);
+  knn.addTrainingPoint('Hispa', [0.03, 0.03, 0.02, 0.03, 0.03, 0.78, 0.03, 0.02, 0.01]);
 
   // Neck Blast
   knn.addTrainingPoint('Neck_Blast', [0.02, 0.05, 0.04, 0.03, 0.02, 0.02, 0.80, 0.01, 0.01]);
   knn.addTrainingPoint('Neck_Blast', [0.01, 0.06, 0.03, 0.02, 0.02, 0.02, 0.83, 0.01, 0.00]);
   knn.addTrainingPoint('Neck_Blast', [0.03, 0.04, 0.05, 0.04, 0.03, 0.03, 0.75, 0.02, 0.01]);
+  knn.addTrainingPoint('Neck_Blast', [0.02, 0.05, 0.03, 0.03, 0.02, 0.02, 0.82, 0.01, 0.00]);
+  knn.addTrainingPoint('Neck_Blast', [0.01, 0.06, 0.04, 0.03, 0.02, 0.02, 0.78, 0.02, 0.01]);
 
   // Sheath Blight
   knn.addTrainingPoint('Sheath_Blight_Rot', [0.02, 0.02, 0.01, 0.02, 0.02, 0.02, 0.02, 0.80, 0.07]);
   knn.addTrainingPoint('Sheath_Blight_Rot', [0.01, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.85, 0.07]);
   knn.addTrainingPoint('Sheath_Blight_Rot', [0.03, 0.03, 0.02, 0.03, 0.02, 0.02, 0.03, 0.75, 0.06]);
+  knn.addTrainingPoint('Sheath_Blight_Rot', [0.02, 0.02, 0.01, 0.02, 0.02, 0.02, 0.02, 0.82, 0.06]);
+  knn.addTrainingPoint('Sheath_Blight_Rot', [0.01, 0.03, 0.01, 0.01, 0.01, 0.01, 0.02, 0.78, 0.08]);
 
   // Stemborer
   knn.addTrainingPoint('Stemborer', [0.03, 0.01, 0.02, 0.01, 0.02, 0.01, 0.01, 0.05, 0.84]);
   knn.addTrainingPoint('Stemborer', [0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.00, 0.06, 0.87]);
   knn.addTrainingPoint('Stemborer', [0.04, 0.02, 0.03, 0.02, 0.03, 0.02, 0.02, 0.05, 0.77]);
+  knn.addTrainingPoint('Stemborer', [0.02, 0.01, 0.02, 0.01, 0.02, 0.01, 0.01, 0.06, 0.84]);
+  knn.addTrainingPoint('Stemborer', [0.03, 0.02, 0.01, 0.02, 0.01, 0.01, 0.01, 0.04, 0.82]);
 
   return knn;
 };

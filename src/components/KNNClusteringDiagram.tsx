@@ -142,25 +142,10 @@ export default function KNNClusteringDiagram({ knnInfo, predictedClass }: KNNClu
       {/* Method Explanation */}
       <motion.div
         variants={itemVariants}
-        className="bg-indigo-50 border border-indigo-200 rounded-lg p-4"
-      >
-        <h4 className="font-bold text-indigo-900 mb-2">💡 Cara Kerja KNN:</h4>
-        <ol className="text-sm text-indigo-800 space-y-1 ml-4 list-decimal">
-          <li>Hitung Euclidean distance antara input dengan semua training profiles</li>
-          <li>Cari 3 profiles dengan distance terkecil (k=3 neighbors)</li>
-          <li>Voting: class mana yang paling banyak muncul di 3 neighbors</li>
-          <li>Confidence = jumlah vote / k (mis: 2/3 = 66.67%)</li>
-          <li>Gunakan voting result untuk memperkuat prediksi AI</li>
-        </ol>
-      </motion.div>
-
-      {/* Hybrid System Note */}
-      <motion.div
-        variants={itemVariants}
         className="bg-amber-50 border border-amber-200 rounded-lg p-4"
       >
         <p className="text-sm text-amber-900">
-          <span className="font-semibold">ℹ️ Hybrid System:</span> KNN digunakan sebagai validator untuk memperkuat prediksi Deep Learning. Hasil final menggabungkan confidence dari kedua metode untuk akurasi maksimal.
+          <span className="font-semibold">ℹ️ Validasi KNN:</span> Sistem menggunakan K-Nearest Neighbor untuk memvalidasi prediksi. Menemukan 3 profil terdekat dari data latih, kemudian melakukan voting untuk memastikan keputusan lebih akurat dan dapat dipercaya.
         </p>
       </motion.div>
     </motion.div>
