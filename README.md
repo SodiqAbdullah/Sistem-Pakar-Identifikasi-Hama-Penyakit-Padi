@@ -59,18 +59,10 @@ Aplikasi web berbasis AI untuk mengidentifikasi hama dan penyakit tanaman padi s
 - Responsive design untuk semua devices
 - Mobile-first approach
 
-### 7. **Camera Capture untuk Mobile**
-- Alternatif input selain file upload
-- Akses kamera perangkat via getUserMedia API
-- Dukungan untuk camera facing environment (belakang)
-- Real-time preview sebelum analisis
-- Pengiriman otomatis ke pipeline prediksi yang sama
-
-### 8. **Visualisasi KNN Clustering Diagram**
+### 7. **Visualisasi KNN Clustering Diagram**
 - Diagram interaktif menampilkan K-Nearest Neighbors yang ditemukan
 - Termasuk jarak (distance) setiap neighbor
 - Ranking dengan badge (gold/silver/bronze untuk top 3)
-- Penjelasan visualisasi K-Nearest Neighbor algorithm
 - Membantu pemahaman keputusan AI kepada pengguna
 - Ditampilkan di tab ringkasan hasil diagnosis
 
@@ -766,47 +758,7 @@ Dapatkan:
 
 ---
 
-## 📷 Fitur Camera Capture
-
-### Cara Menggunakan Camera untuk Input
-
-1. **Klik tombol Camera** di halaman upload
-   - Tombol "📷 Ambil dengan Kamera" akan meminta akses ke kamera perangkat
-   
-2. **Berikan Izin Akses**
-   - Browser akan meminta permission untuk mengakses webcam
-   - Pilih "Allow" untuk melanjutkan
-
-3. **Ambil Foto**
-   - Posisikan kamera untuk menangkap area yang terserang penyakit
-   - Pastikan pencahayaan cukup
-   - Klik tombol "📸 Tangkap Gambar" untuk mengambil foto
-
-4. **Preview Gambar**
-   - Gambar akan ditampilkan di preview
-   - Gambar akan otomatis diproses melalui analisis yang sama seperti file upload
-
-### Dukungan Browser & Device
-
-| Device | Browser | Dukungan |
-|--------|---------|----------|
-| Android Phone | Chrome | ✅ Penuh |
-| Android Phone | Firefox | ✅ Penuh |
-| iPhone/iPad | Safari | ✅ Penuh (iOS 14.5+) |
-| Desktop | Chrome | ✅ Penuh |
-| Desktop | Firefox | ✅ Penuh |
-| Desktop | Safari | ✅ Penuh |
-
-### Tips Penggunaan Mobile
-
-- 📱 Gunakan mode **landscape** untuk area yang lebih luas
-- 💡 Pastikan **pencahayaan natural** atau cukup lampu
-- 👁️ Fokuskan pada **area gejala utama** (daun/buah yang terserang)
-- 🔄 Jika hasil kurang memuaskan, coba ulang dari berbagai sudut
-
----
-
-## 📊 Visualisasi K-Nearest Neighbor (KNN) Clustering
+##  Visualisasi K-Nearest Neighbor (KNN) Clustering
 
 ### Apa itu KNN Diagram?
 
