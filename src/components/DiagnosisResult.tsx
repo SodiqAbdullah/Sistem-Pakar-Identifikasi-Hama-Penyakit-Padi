@@ -101,58 +101,61 @@ export default function DiagnosisResult({ result, onReset, imagePreview }: Diagn
       {/* Main Content with Tabs */}
       <motion.div variants={itemVariants} className="bg-white rounded-lg shadow-lg border border-slate-200 overflow-hidden">
         {/* Tabs */}
-        <div className="flex border-b border-slate-200">
+        <div className="flex border-b border-slate-200 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`flex-1 py-3 px-4 font-semibold flex items-center justify-center gap-2 transition-colors ${
+            className={`flex-1 py-2 md:py-3 px-2 md:px-4 font-semibold flex items-center justify-center gap-1 md:gap-2 transition-colors text-xs md:text-sm whitespace-nowrap min-w-fit ${
               activeTab === 'overview'
                 ? 'bg-blue-600 text-white border-b-2 border-blue-600'
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
             }`}
           >
-            <AlertCircle size={18} />
-            Ringkasan
+            <AlertCircle size={16} className="md:w-4 md:h-4" />
+            <span className="hidden md:inline">Ringkasan</span>
+            <span className="md:hidden">Ringkasan</span>
           </button>
           <button
             onClick={() => setActiveTab('details')}
-            className={`flex-1 py-3 px-4 font-semibold flex items-center justify-center gap-2 transition-colors ${
+            className={`flex-1 py-2 md:py-3 px-2 md:px-4 font-semibold flex items-center justify-center gap-1 md:gap-2 transition-colors text-xs md:text-sm whitespace-nowrap min-w-fit ${
               activeTab === 'details'
                 ? 'bg-blue-600 text-white border-b-2 border-blue-600'
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
             }`}
           >
-            <FileText size={18} />
-            Detail & Solusi
+            <FileText size={16} className="md:w-4 md:h-4" />
+            <span className="hidden md:inline">Detail & Solusi</span>
+            <span className="md:hidden">Detail</span>
           </button>
           <button
             onClick={() => setActiveTab('images')}
-            className={`flex-1 py-3 px-4 font-semibold flex items-center justify-center gap-2 transition-colors ${
+            className={`flex-1 py-2 md:py-3 px-2 md:px-4 font-semibold flex items-center justify-center gap-1 md:gap-2 transition-colors text-xs md:text-sm whitespace-nowrap min-w-fit ${
               activeTab === 'images'
                 ? 'bg-blue-600 text-white border-b-2 border-blue-600'
                 : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
             }`}
           >
-            <ImageIcon size={18} />
-            Contoh Gambar
+            <ImageIcon size={16} className="md:w-4 md:h-4" />
+            <span className="hidden md:inline">Contoh Gambar</span>
+            <span className="md:hidden">Contoh</span>
           </button>
         </div>
 
         {/* Tab Content */}
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <motion.div variants={itemVariants} className="space-y-4">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Deskripsi</h3>
-                <p className="text-slate-700 leading-relaxed">{result.diseaseInfo.description}</p>
+                <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">Deskripsi</h3>
+                <p className="text-sm md:text-base text-slate-700 leading-relaxed">{result.diseaseInfo.description}</p>
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Gejala yang Terdeteksi</h3>
+                <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">Gejala yang Terdeteksi</h3>
                 <ul className="space-y-2">
                   {result.diseaseInfo.symptoms.map((symptom, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-slate-700">
-                      <CheckCircle size={18} className="text-green-600 flex-shrink-0 mt-0.5" />
+                    <li key={idx} className="flex items-start gap-3 text-sm md:text-base text-slate-700">
+                      <CheckCircle size={16} className="md:w-4.5 md:h-4.5 text-green-600 flex-shrink-0 mt-0.5" />
                       <span>{symptom}</span>
                     </li>
                   ))}
@@ -198,17 +201,17 @@ export default function DiagnosisResult({ result, onReset, imagePreview }: Diagn
           {activeTab === 'details' && (
             <motion.div variants={itemVariants} className="space-y-4">
               <div>
-                <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-                  <Heart className="text-red-500" size={20} />
+                <h3 className="text-base md:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                  <Heart className="text-red-500" size={18} className="md:w-5 md:h-5" />
                   Solusi Penanganan
                 </h3>
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-slate-800 leading-relaxed whitespace-pre-wrap">
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 md:p-4 text-sm md:text-base text-slate-800 leading-relaxed whitespace-pre-wrap">
                   {result.diseaseInfo.solution}
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-sm text-green-700">
+              <div className="mt-6 p-3 md:p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-xs md:text-sm text-green-700 leading-relaxed">
                   <span className="font-semibold">Catatan:</span> Konsultasikan dengan ahli pertanian lokal atau petugas dari Dinas Pertanian untuk penanganan yang lebih spesifik sesuai dengan kondisi lahan Anda.
                 </p>
               </div>
@@ -218,18 +221,18 @@ export default function DiagnosisResult({ result, onReset, imagePreview }: Diagn
           {/* Images Tab */}
           {activeTab === 'images' && (
             <motion.div variants={itemVariants}>
-              <h3 className="text-lg font-bold text-slate-900 mb-4">Contoh Gambar Gejala</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <h3 className="text-base md:text-lg font-bold text-slate-900 mb-4">Contoh Gambar Gejala</h3>
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4">
                 {getImageExamples().slice(0, 6).map((imgPath, idx) => (
                   <motion.div
                     key={idx}
                     whileHover={{ scale: 1.05 }}
-                    className="relative rounded-lg overflow-hidden shadow-md border border-slate-200 aspect-square bg-slate-100"
+                    className="relative rounded-lg overflow-hidden shadow-md border border-slate-200 aspect-square bg-slate-100\"
                   >
                     <img
                       src={imgPath}
                       alt={`Contoh ${idx + 1}`}
-                      className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                      className="w-full h-full object-cover hover:opacity-90 transition-opacity\"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder.png';
                       }}
@@ -239,7 +242,7 @@ export default function DiagnosisResult({ result, onReset, imagePreview }: Diagn
                 ))}
               </div>
               {getImageExamples().length === 0 && (
-                <p className="text-slate-600 text-center py-8">Tidak ada gambar contoh tersedia untuk kategori ini.</p>
+                <p className="text-sm md:text-base text-slate-600 text-center py-8">Tidak ada gambar contoh tersedia untuk kategori ini.</p>
               )}
             </motion.div>
           )}

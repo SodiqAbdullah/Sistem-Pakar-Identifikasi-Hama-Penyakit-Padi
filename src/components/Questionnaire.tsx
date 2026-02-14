@@ -69,23 +69,23 @@ export default function Questionnaire({ diseaseInfo, onSubmit }: QuestionnairePr
       animate="visible"
       className="w-full max-w-2xl mx-auto"
     >
-      <div className="bg-white rounded-lg shadow-lg p-8 border border-slate-200">
-        <motion.div variants={itemVariants} className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
+      <div className="bg-white rounded-lg shadow-lg p-4 md:p-8 border border-slate-200">
+        <motion.div variants={itemVariants} className="mb-6 md:mb-8">
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">
             Validasi Diagnosa
           </h2>
-          <p className="text-slate-600">
+          <p className="text-sm md:text-base text-slate-600">
             Silakan jawab pertanyaan berikut untuk memvalidasi diagnosa AI:
           </p>
         </motion.div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           {diseaseInfo.validation_questions.length === 0 ? (
             <motion.div
               variants={itemVariants}
-              className="bg-green-50 border border-green-200 rounded-lg p-6 text-center"
+              className="bg-green-50 border border-green-200 rounded-lg p-4 md:p-6 text-center"
             >
-              <p className="text-green-800 font-medium">
+              <p className="text-sm md:text-base text-green-800 font-medium">
                 Tanaman ini dalam kondisi sehat. Tidak perlu validasi lebih lanjut.
               </p>
             </motion.div>
@@ -98,45 +98,48 @@ export default function Questionnaire({ diseaseInfo, onSubmit }: QuestionnairePr
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="border border-slate-300 rounded-lg p-6 hover:shadow-md transition-shadow"
+                  className="border border-slate-300 rounded-lg p-4 md:p-6 hover:shadow-md transition-shadow"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-semibold">
+                  <div className="flex items-start gap-2 md:gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-semibold text-sm">
                       {index + 1}
                     </div>
-                    <div className="flex-1">
-                      <p className="text-slate-900 font-medium mb-4">{question}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm md:text-base text-slate-900 font-medium mb-3 md:mb-4">{question}</p>
 
-                      <div className="flex gap-3">
+                      <div className="flex gap-2 md:gap-3 flex-wrap">
                         <button
                           onClick={() => handleAnswerChange(questionKey, 25)}
-                          className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
+                          className={`flex-1 py-1.5 md:py-2 px-2 md:px-3 rounded-lg font-medium text-xs md:text-sm transition-all min-w-0 ${
                             answers[questionKey] === 25
                               ? 'bg-orange-400 text-white'
                               : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                           }`}
                         >
-                          Tidak Yakin
+                          <span className="hidden md:inline">Tidak Yakin</span>
+                          <span className="md:hidden">Tidak</span>
                         </button>
                         <button
                           onClick={() => handleAnswerChange(questionKey, 50)}
-                          className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
+                          className={`flex-1 py-1.5 md:py-2 px-2 md:px-3 rounded-lg font-medium text-xs md:text-sm transition-all min-w-0 ${
                             answers[questionKey] === 50
                               ? 'bg-yellow-300 text-yellow-900'
                               : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
                           }`}
                         >
-                          Agak Yakin
+                          <span className="hidden md:inline">Agak Yakin</span>
+                          <span className="md:hidden">Agak</span>
                         </button>
                         <button
                           onClick={() => handleAnswerChange(questionKey, 100)}
-                          className={`flex-1 py-2 px-3 rounded-lg font-medium transition-all ${
+                          className={`flex-1 py-1.5 md:py-2 px-2 md:px-3 rounded-lg font-medium text-xs md:text-sm transition-all min-w-0 ${
                             answers[questionKey] === 100
                               ? 'bg-green-500 text-white'
                               : 'bg-green-100 text-green-700 hover:bg-green-200'
                           }`}
                         >
-                          Sangat Yakin
+                          <span className="hidden md:inline">Sangat Yakin</span>
+                          <span className="md:hidden">Sangat</span>
                         </button>
                       </div>
 
@@ -144,9 +147,9 @@ export default function Questionnaire({ diseaseInfo, onSubmit }: QuestionnairePr
                         <motion.div
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
-                          className="mt-3 flex items-center gap-2 text-green-600 text-sm"
+                          className="mt-2 md:mt-3 flex items-center gap-2 text-green-600 text-xs md:text-sm"
                         >
-                          <Check size={16} />
+                          <Check size={14} className="flex-shrink-0" />
                           <span>Jawaban Tercatat</span>
                         </motion.div>
                       )}
