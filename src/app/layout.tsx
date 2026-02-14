@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: 'Sistem Pakar Identifikasi Hama & Penyakit Padi',
   description: 'Aplikasi AI untuk identifikasi hama dan penyakit tanaman padi secara akurat',
   keywords: 'padi, hama, penyakit, AI, deteksi, diagnosis',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

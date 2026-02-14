@@ -18,6 +18,9 @@ import DiagnosisResult from '@/components/DiagnosisResult';
 
 export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
   const [currentStep, setCurrentStep] = useState<'upload' | 'chart' | 'validation' | 'result'>('upload');
@@ -29,6 +32,7 @@ export default function Home() {
   const [model, setModel] = useState<any>(null);
   const [modelLoading, setModelLoading] = useState(true);
   const [diagnosisResult, setDiagnosisResult] = useState<DiagnosisResultType | null>(null);
+  const [cameraActive, setCameraActive] = useState(false);
 
   // Load model on mount
   useEffect(() => {
@@ -235,12 +239,73 @@ export default function Home() {
     setDiagnosisResult(null);
     setError(null);
     setLoading(false);
+    setCameraActive(false);
+    if (videoRef.current) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream?.getTracks().forEach(track => track.stop());
+    }
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
-      // Reset file input to allow selecting the same file again
       fileInputRef.current.type = 'text';
       fileInputRef.current.type = 'file';
     }
+  };
+
+  // Handle camera access
+  const handleCameraClick = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }, // Back camera untuk mobile
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        setCameraActive(true);
+        setError(null);
+      }
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Tidak dapat mengakses kamera';
+      if (errorMsg.includes('NotAllowedError')) {
+        setError('Kamera ditolak. Silakan berikan izin akses kamera di pengaturan browser.');
+      } else if (errorMsg.includes('NotFoundError')) {
+        setError('Kamera tidak ditemukan di perangkat Anda.');
+      } else {
+        setError(`Gagal mengakses kamera: ${errorMsg}`);
+      }
+    }
+  };
+
+  // Capture photo from camera
+  const handleCameraCapture = () => {
+    if (videoRef.current && canvasRef.current) {
+      const context = canvasRef.current.getContext('2d');
+      if (context) {
+        canvasRef.current.width = videoRef.current.videoWidth;
+        canvasRef.current.height = videoRef.current.videoHeight;
+        context.drawImage(videoRef.current, 0, 0);
+
+        // Convert canvas to data URL
+        const imageData = canvasRef.current.toDataURL('image/jpeg');
+        setImagePreview(imageData);
+        setSelectedFile(
+          new File([imageData], 'camera-capture.jpg', { type: 'image/jpeg' })
+        );
+
+        // Stop camera stream
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream?.getTracks().forEach(track => track.stop());
+        setCameraActive(false);
+        setError(null);
+      }
+    }
+  };
+
+  // Cancel camera
+  const handleCameraCancel = () => {
+    if (videoRef.current) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream?.getTracks().forEach(track => track.stop());
+    }
+    setCameraActive(false);
   };
 
   const pageVariants = {
@@ -353,35 +418,83 @@ export default function Home() {
               exit="exit"
             >
               <div className="max-w-2xl mx-auto">
-                {/* Upload Area */}
-                <motion.div
-                  whileHover={{ scale: loading ? 1 : 1.02 }}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  onClick={() => !loading && fileInputRef.current?.click()}
-                  className={`bg-white rounded-lg shadow-lg border-2 border-dashed border-blue-300 p-12 text-center cursor-pointer transition-all ${
-                    loading
-                      ? 'opacity-50 cursor-not-allowed border-slate-300'
-                      : 'hover:border-blue-500 hover:shadow-xl'
-                  }`}
-                >
-                  <Upload className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-                  <h2 className="text-2xl font-bold text-slate-900 mb-2">Unggah Foto Daun Padi</h2>
-                  <p className="text-slate-600 mb-4">
-                    Tarik dan lepas gambar di sini, atau klik untuk memilih dari perangkat Anda
-                  </p>
-                  <p className="text-sm text-slate-500">Format: JPG, PNG | Ukuran: Maksimal 10 MB</p>
+                {!cameraActive ? (
+                  <>
+                    {/* Upload Area */}
+                    <motion.div
+                      whileHover={{ scale: loading ? 1 : 1.02 }}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onClick={() => !loading && fileInputRef.current?.click()}
+                      className={`bg-white rounded-lg shadow-lg border-2 border-dashed border-blue-300 p-12 text-center cursor-pointer transition-all ${
+                        loading
+                          ? 'opacity-50 cursor-not-allowed border-slate-300'
+                          : 'hover:border-blue-500 hover:shadow-xl'
+                      }`}
+                    >
+                      <Upload className="w-16 h-16 text-blue-500 mx-auto mb-4" />
+                      <h2 className="text-2xl font-bold text-slate-900 mb-2">Unggah Foto Daun Padi</h2>
+                      <p className="text-slate-600 mb-4">
+                        Tarik dan lepas gambar di sini, atau klik untuk memilih dari perangkat Anda
+                      </p>
+                      <p className="text-sm text-slate-500">Format: JPG, PNG | Ukuran: Maksimal 10 MB</p>
 
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                    aria-label="Unggah foto daun padi"
-                    title="Unggah foto daun padi"
-                  />
-                </motion.div>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                        aria-label="Unggah foto daun padi"
+                        title="Unggah foto daun padi"
+                      />
+                    </motion.div>
+
+                    {/* Camera Button */}
+                    <motion.button
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      onClick={handleCameraClick}
+                      disabled={loading}
+                      className={`w-full mt-4 py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-all ${
+                        loading
+                          ? 'bg-slate-300 text-slate-600 cursor-not-allowed'
+                          : 'bg-green-500 hover:bg-green-600 text-white active:scale-95'
+                      }`}
+                    >
+                      📷 Ambil Foto dengan Kamera
+                    </motion.button>
+                  </>
+                ) : (
+                  /* Camera Capture Mode */
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden border border-slate-200"
+                  >
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      className="w-full bg-black"
+                    />
+                    <div className="p-4 bg-slate-50 border-t border-slate-200 flex gap-2">
+                      <button
+                        onClick={handleCameraCapture}
+                        className="flex-1 py-2 px-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg active:scale-95 transition-all"
+                      >
+                        ✓ Ambil Foto
+                      </button>
+                      <button
+                        onClick={handleCameraCancel}
+                        className="flex-1 py-2 px-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg active:scale-95 transition-all"
+                      >
+                        ✗ Batal
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
 
                 {/* Image Preview */}
                 {imagePreview && (
@@ -400,7 +513,7 @@ export default function Home() {
                       </div>
                       <div className="p-4 bg-slate-50 border-t border-slate-200">
                         <p className="text-sm text-slate-600 mb-3">
-                          File: {selectedFile?.name}
+                          File: {selectedFile?.name || 'camera-capture.jpg'}
                         </p>
                         <button
                           onClick={() => !loading && fileInputRef.current?.click()}
@@ -578,6 +691,9 @@ export default function Home() {
             Disclaimer: Hasil diagnosis ini bersifat informatif. Konsultasikan dengan ahli pertanian untuk keputusan penanganan final.
           </p>
         </motion.div>
+
+        {/* Hidden canvas for camera capture */}
+        <canvas ref={canvasRef} className="hidden" />
       </div>
     </div>
   );

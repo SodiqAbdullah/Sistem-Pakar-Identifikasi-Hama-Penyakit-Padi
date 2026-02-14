@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { AlertCircle, CheckCircle, Heart, FileText, Image as ImageIcon, RotateCcw } from 'lucide-react';
 import { DiagnosisResult as DiagnosisResultType } from '@/types';
 import { getSeverityColor, getSeverityText, getConfidenceLevel, getConfidenceLevelColor } from '@/utils/predictionUtils';
+import KNNClusteringDiagram from './KNNClusteringDiagram';
 
 interface DiagnosisResultProps {
   result: DiagnosisResultType;
@@ -178,6 +179,15 @@ export default function DiagnosisResult({ result, onReset }: DiagnosisResultProp
                       ))}
                     </div>
                   )}
+                </div>
+              )}
+
+              {result.knnInfo && (
+                <div className="mt-6">
+                  <KNNClusteringDiagram 
+                    knnInfo={result.knnInfo} 
+                    predictedClass={result.diseaseClass}
+                  />
                 </div>
               )}
             </motion.div>
