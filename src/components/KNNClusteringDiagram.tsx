@@ -7,9 +7,10 @@ import { KNNInfo } from '@/types';
 interface KNNClusteringDiagramProps {
   knnInfo: KNNInfo;
   predictedClass: string;
+  imagePreview?: string | null;
 }
 
-export default function KNNClusteringDiagram({ knnInfo, predictedClass }: KNNClusteringDiagramProps) {
+export default function KNNClusteringDiagram({ knnInfo, predictedClass, imagePreview }: KNNClusteringDiagramProps) {
   const maxDistance = Math.max(...knnInfo.neighbors.map(n => n.distance));
   
   const containerVariants = {
@@ -51,10 +52,19 @@ export default function KNNClusteringDiagram({ knnInfo, predictedClass }: KNNClu
         variants={itemVariants}
         className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-400 rounded-lg p-6"
       >
-        <div className="flex items-center justify-center">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-500 text-white rounded-full mb-2">
-              <span className="text-2xl font-bold">?</span>
+        <div className="flex items-center justify-center gap-6">
+          {imagePreview && (
+            <div className="flex-shrink-0">
+              <img
+                src={imagePreview}
+                alt="Input"
+                className="w-20 h-20 rounded-lg object-cover border-2 border-blue-400 shadow-md"
+              />
+            </div>
+          )}
+          <div className="text-center flex-1">
+            <div className={`inline-flex items-center justify-center ${imagePreview ? 'w-16 h-16' : 'w-20 h-20'} bg-blue-500 text-white rounded-full mb-2`}>
+              <span className={`font-bold ${imagePreview ? 'text-xl' : 'text-2xl'}`}>?</span>
             </div>
             <p className="font-bold text-slate-900">Input Gambar</p>
             <p className="text-xs text-slate-600 mt-1">(Probability Vector)</p>

@@ -10,9 +10,10 @@ import KNNClusteringDiagram from './KNNClusteringDiagram';
 interface DiagnosisResultProps {
   result: DiagnosisResultType;
   onReset: () => void;
+  imagePreview?: string | null;
 }
 
-export default function DiagnosisResult({ result, onReset }: DiagnosisResultProps) {
+export default function DiagnosisResult({ result, onReset, imagePreview }: DiagnosisResultProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'details' | 'images'>('overview');
 
   const getIcon = () => {
@@ -187,6 +188,7 @@ export default function DiagnosisResult({ result, onReset }: DiagnosisResultProp
                   <KNNClusteringDiagram 
                     knnInfo={result.knnInfo} 
                     predictedClass={result.diseaseClass}
+                    imagePreview={imagePreview}
                   />
                 </div>
               )}

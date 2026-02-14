@@ -559,7 +559,7 @@ export default function Home() {
               exit="exit"
             >
               {diagnosisResult && (
-                <DiagnosisResult result={diagnosisResult} onReset={handleReset} />
+                <DiagnosisResult result={diagnosisResult} onReset={handleReset} imagePreview={imagePreview} />
               )}
             </motion.div>
           ) : null}
