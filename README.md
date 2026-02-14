@@ -24,8 +24,11 @@ Aplikasi web berbasis AI untuk mengidentifikasi hama dan penyakit tanaman padi s
 
 ## 🎯 Fitur Utama
 
-### 1. **Analisis AI dengan Teachable Machine**
-- Prediksi berdasarkan image recognition menggunakan TensorFlow.js
+### 1. **Analisis Hybrid: Teachable Machine + K-Nearest Neighbor (KNN)**
+- **Metode Dual**: Kombinasi Deep Learning (TensorFlow.js) + KNN Voting
+- **TensorFlow.js**: Ekstraksi fitur dan prediksi awal dari gambar
+- **KNN Validator**: Validasi hasil TM dengan mencari 3 tetangga terdekat dalam ruang fitur
+- **Confidence Boosting**: Meningkatkan akurasi dengan hybrid voting system
 - Identifikasi 9 kelas: BLB, BPH, Brown Spot, False Smut, Healthy Plant, Hispa, Neck Blast, Sheath Blight, dan Stemborer
 - Probabilitas akurat untuk setiap prediksi
 
@@ -245,6 +248,62 @@ sistem-pakar-padi/
 
 ---
 
+## 🤖 Implementasi K-Nearest Neighbor (KNN)
+
+### Algoritma KNN dalam Hybrid System
+
+**KNN Classifier** diimplementasikan sebagai **validator** untuk memperkuat prediksi Teachable Machine:
+
+#### Step 1: Feature Extraction
+- TensorFlow.js menghasilkan probability vector dengan 9 elemen (satu per kelas)
+- Contoh: `[0.05, 0.80, 0.03, 0.05, 0.02, 0.02, 0.02, 0.01, 0.00]` untuk BLB
+
+#### Step 2: Training Profiles
+KNN disimpan dengan 3 representative profiles per kelas (27 total):
+```
+Healthy_Plant:
+  [0.85, 0.02, 0.03, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01]
+  [0.90, 0.01, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01]
+  [0.80, 0.03, 0.04, 0.03, 0.03, 0.03, 0.02, 0.01, 0.01]
+
+BLB:
+  [0.05, 0.80, 0.03, 0.05, 0.02, 0.02, 0.02, 0.01, 0.00]
+  [0.02, 0.85, 0.04, 0.03, 0.02, 0.02, 0.01, 0.01, 0.00]
+  [0.03, 0.75, 0.05, 0.05, 0.03, 0.03, 0.03, 0.02, 0.01]
+... (dst untuk 9 kelas)
+```
+
+#### Step 3: Distance Calculation
+- Gunakan **Euclidean Distance**:
+  ```
+  distance = √[(x1-y1)² + (x2-y2)² + ... + (x9-y9)²]
+  ```
+- Hitung distance dari input features ke semua 27 training profiles
+
+#### Step 4: KNN Voting (k=3)
+1. Ambil 3 nearest profiles (k=3 neighbors)
+2. Voting: tentukan class dengan majority vote
+3. Confidence = (jumlah vote / k) = 0 sampai 1
+
+#### Step 5: Hybrid Confidence Boosting
+- Jika TM & KNN setuju → boost confidence:
+  ```
+  finalProbability = (TM_prob × 0.7) + (KNN_confidence × 0.3)
+  ```
+- Jika tidak setuju → tetap gunakan TM, KNN hanya sebagai validator info
+
+### Keuntungan Hybrid KNN + Deep Learning
+
+| Aspek | Benefit |
+|-------|---------|
+| **Akurasi** | Kombinasi memperkuat prediksi |
+| **Interpretabilitas** | KNN menunjukkan tetangga terdekat (explainable) |
+| **Robustness** | Kurang sensitif outlier |
+| **Validasi** | Double-check hasil dengan 2 metode |
+| **Confidence** | Lebih reliable confidence scores |
+
+---
+
 ## ⚙️ Konfigurasi Model
 
 ### Lokasi Model Teachable Machine
@@ -311,41 +370,53 @@ Stemborer
                    │
                    ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 2: AI Prediction (TensorFlow.js)                      │
+│ Step 2: Deep Learning Prediction (TensorFlow.js)           │
 │ - Load model dari public/model/                            │
 │ - Prediksi dengan Teachable Machine                        │
-│ - Output: class name + probability                         │
-│ - Condition: jika probability > 50%? lanjut : retry       │
+│ - Ekstraksi probability vector (9 features)                │
+│ - Output: class name + probability + feature vector        │
 └──────────────────┬──────────────────────────────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 3: Visualisasi Bar Chart                              │
-│ - Display top 3 predictions                                │
-│ - Show probability percentages                             │
-│ - Explain AI reasoning                                     │
+│ Step 3: KNN Validation (K-Nearest Neighbor, k=3)           │
+│ - Hitung Euclidean distance ke semua training profiles     │
+│ - Cari 3 nearest neighbors dari training data              │
+│ - KNN Voting: tentukan class dari majority neighbors       │
+│ - Boost confidence jika TM & KNN agree                     │
+│ - Hasil: Validated prediction dengan confidence score      │
 └──────────────────┬──────────────────────────────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 4: User Validation Questions                          │
+│ Step 4: Visualisasi Bar Chart & Hybrid Info                │
+│ - Display top 3 predictions dari TM                        │
+│ - Show KNN method: "Hybrid: K-Nearest Neighbor + DL"      │
+│ - Display KNN confidence & nearest neighbors               │
+│ - Explain AI reasoning & KNN validation                    │
+└──────────────────┬──────────────────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Step 5: User Validation Questions                          │
 │ - 3 pertanyaan spesifik per penyakit                       │
-│ - Response: Tidak Yakin (0), Agak Yakin (50), Yakin (100) │
+│ - Response: Tidak Yakin (25), Agak Yakin (50), Yakin (100) │
 │ - Calculate: User Score = avg(Q1, Q2, Q3) * 100           │
 └──────────────────┬──────────────────────────────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 5: Calculate Final Score                              │
+│ Step 6: Calculate Final Score                              │
 │ - Final Score = (AI Prob × 0.7) + (User Score × 0.3)      │
 │ - Confidence Level berdasarkan score                       │
 └──────────────────┬──────────────────────────────────────────┘
                    │
                    ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Step 6: Diagnosis Result                                   │
+│ Step 7: Diagnosis Result                                   │
 │ - Disease name & description                              │
 │ - Severity badge (Sehat/Ringan/Sedang/Parah)              │
+│ - KNN Details: nearest neighbors & distance matrix        │
 │ - 3 Tabs: Ringkasan | Detail & Solusi | Contoh Gambar    │
 │ - Print atau Diagnosa Ulang                               │
 └─────────────────────────────────────────────────────────────┘
@@ -353,17 +424,40 @@ Stemborer
 
 ### Main Functions
 
-#### `src/utils/predictionUtils.ts`
+#### KNN Classifier (`src/utils/predictionUtils.ts`)
+
+```typescript
+// Initialize KNN dengan training profiles
+initializeKNNClassifier(): KNNClassifier
+
+class KNNClassifier {
+  // Add training data point (typical probability profiles)
+  addTrainingPoint(className: string, features: number[]): void
+  
+  // Predict menggunakan KNN voting
+  predict(features: number[]): {
+    className: string
+    confidence: number
+    neighbors: Array<{className, distance}>
+  }
+  
+  // Calculate Euclidean distance
+  private euclideanDistance(a: number[], b: number[]): number
+}
+```
+
+#### Hybrid Prediction (`src/utils/predictionUtils.ts`)
 
 ```typescript
 // Load Teachable Machine model
 loadTeachableMachineModel(): Promise<{}>
 
-// Predict image
+// Predict image dengan Hybrid TM + KNN
 predictImage(model: any, imageElement: HTMLImageElement): Promise<{
   class: string
   probability: number
   allPredictions: ClassifyResult[]
+  knnInfo?: KNNInfo  // KNN validation details
 }>
 
 // Calculate user score

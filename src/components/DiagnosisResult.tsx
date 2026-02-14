@@ -158,10 +158,28 @@ export default function DiagnosisResult({ result, onReset }: DiagnosisResultProp
               </div>
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
-                <p className="text-sm text-blue-700">
+                <p className="text-sm text-blue-700 mb-2">
                   <span className="font-semibold">Penjelasan AI:</span> Sistem mengidentifikasi penyakit ini berdasarkan analisis fitur visual dari gambar yang diunggah. Probabilitas {Math.round(result.aiProbability * 100)}% menunjukkan tingkat kesamaan dengan pola penyakit yang ada di dataset pelatihan.
                 </p>
               </div>
+
+              {result.knnInfo && (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <p className="text-sm text-purple-700">
+                    <span className="font-semibold">Validasi KNN:</span> {result.knnInfo.method}. Sistem menemukan {result.knnInfo.neighbors.length} tetangga terdekat dalam ruang fitur, yang memperkuat kepercayaan pada prediksi {result.diseaseClass} dengan level {(result.knnInfo.knnConfidence * 100).toFixed(0)}%.
+                  </p>
+                  {result.knnInfo.neighbors.length > 0 && (
+                    <div className="mt-3 text-xs text-purple-600">
+                      <p className="font-semibold mb-1">K-Nearest Neighbors:</p>
+                      {result.knnInfo.neighbors.map((neighbor, idx) => (
+                        <div key={idx} className="ml-2">
+                          • {neighbor.className} (distance: {neighbor.distance.toFixed(3)})
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           )}
 

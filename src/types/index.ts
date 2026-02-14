@@ -1,7 +1,20 @@
+export interface KNNNeighbor {
+  className: string;
+  distance: number;
+}
+
+export interface KNNInfo {
+  knnPredictedClass: string;
+  knnConfidence: number;
+  neighbors: KNNNeighbor[];
+  method: string; // "Hybrid: K-Nearest Neighbor + Deep Learning"
+}
+
 export interface PredictionResult {
   class: string;
   probability: number;
   allPredictions: ClassifyResult[];
+  knnInfo?: KNNInfo;
 }
 
 export interface ClassifyResult {
@@ -32,6 +45,7 @@ export interface DiagnosisResult {
   userScore: number;
   finalScore: number;
   diseaseInfo: DiseaseInfo;
+  knnInfo?: KNNInfo;
 }
 
 export interface Step {

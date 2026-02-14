@@ -220,6 +220,7 @@ export default function Home() {
       userScore,
       finalScore,
       diseaseInfo: diseaseInfo[diseaseClass as keyof typeof diseaseInfo],
+      knnInfo: prediction.knnInfo,
     };
 
     setDiagnosisResult(result);
@@ -493,7 +494,7 @@ export default function Home() {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.2 }}
                     >
-                      <DiagnosisChart predictions={prediction.allPredictions} />
+                      <DiagnosisChart predictions={prediction.allPredictions} knnInfo={prediction.knnInfo} />
                     </motion.div>
 
                     {/* Explanation */}
