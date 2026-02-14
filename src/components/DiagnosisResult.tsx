@@ -188,7 +188,6 @@ export default function DiagnosisResult({ result, onReset, imagePreview }: Diagn
                   <KNNClusteringDiagram 
                     knnInfo={result.knnInfo} 
                     predictedClass={result.diseaseClass}
-                    imagePreview={imagePreview}
                   />
                 </div>
               )}

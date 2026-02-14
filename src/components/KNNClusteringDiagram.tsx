@@ -8,10 +8,9 @@ import KNNScatterPlot from './KNNScatterPlot';
 interface KNNClusteringDiagramProps {
   knnInfo: KNNInfo;
   predictedClass: string;
-  imagePreview?: string | null;
 }
 
-export default function KNNClusteringDiagram({ knnInfo, predictedClass, imagePreview }: KNNClusteringDiagramProps) {
+export default function KNNClusteringDiagram({ knnInfo, predictedClass }: KNNClusteringDiagramProps) {
   const maxDistance = Math.max(...knnInfo.neighbors.map(n => n.distance));
   
   const containerVariants = {
@@ -46,31 +45,6 @@ export default function KNNClusteringDiagram({ knnInfo, predictedClass, imagePre
         <p className="text-slate-600 text-sm">
           Visualisasi 3 tetangga terdekat dalam ruang fitur probabilitas. Semakin dekat (semakin kecil distance), semakin mirip dengan class yang diprediksi.
         </p>
-      </motion.div>
-
-      {/* Central Query Point */}
-      <motion.div
-        variants={itemVariants}
-        className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-400 rounded-lg p-6"
-      >
-        <div className="flex items-center justify-center gap-6">
-          {imagePreview && (
-            <div className="flex-shrink-0">
-              <img
-                src={imagePreview}
-                alt="Input"
-                className="w-20 h-20 rounded-lg object-cover border-2 border-blue-400 shadow-md"
-              />
-            </div>
-          )}
-          <div className="text-center flex-1">
-            <div className={`inline-flex items-center justify-center ${imagePreview ? 'w-16 h-16' : 'w-20 h-20'} bg-blue-500 text-white rounded-full mb-2`}>
-              <span className={`font-bold ${imagePreview ? 'text-xl' : 'text-2xl'}`}>?</span>
-            </div>
-            <p className="font-bold text-slate-900">Input Gambar</p>
-            <p className="text-xs text-slate-600 mt-1">(Probability Vector)</p>
-          </div>
-        </div>
       </motion.div>
 
       {/* Nearest Neighbors List */}
