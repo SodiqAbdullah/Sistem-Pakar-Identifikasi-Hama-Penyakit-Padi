@@ -202,7 +202,7 @@ export default function DiagnosisResult({ result, onReset, imagePreview }: Diagn
             <motion.div variants={itemVariants} className="space-y-4">
               <div>
                 <h3 className="text-base md:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
-                  <Heart className="text-red-500" size={18} className="md:w-5 md:h-5" />
+                  <Heart className="text-red-500" size={18} />
                   Solusi Penanganan
                 </h3>
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 md:p-4 text-sm md:text-base text-slate-800 leading-relaxed whitespace-pre-wrap">
@@ -227,12 +227,12 @@ export default function DiagnosisResult({ result, onReset, imagePreview }: Diagn
                   <motion.div
                     key={idx}
                     whileHover={{ scale: 1.05 }}
-                    className="relative rounded-lg overflow-hidden shadow-md border border-slate-200 aspect-square bg-slate-100\"
+                    className="relative rounded-lg overflow-hidden shadow-md border border-slate-200 aspect-square bg-slate-100"
                   >
                     <img
                       src={imgPath}
                       alt={`Contoh ${idx + 1}`}
-                      className="w-full h-full object-cover hover:opacity-90 transition-opacity\"
+                      className="w-full h-full object-cover hover:opacity-90 transition-opacity"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder.png';
                       }}
