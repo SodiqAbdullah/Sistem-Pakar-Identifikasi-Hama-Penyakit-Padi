@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { KNNInfo } from '@/types';
 import { SimplePCA, PCAPoint } from '@/utils/pcaUtils';
@@ -79,6 +79,30 @@ interface PlotData {
 }
 
 export default function KNNScatterPlot({ knnInfo, queryPoint }: KNNScatterPlotProps) {
+  const [dimensions, setDimensions] = useState({ width: 500, height: 400, isMobile: false });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        setDimensions({
+          width: Math.min(window.innerWidth - 40, 350),
+          height: 300,
+          isMobile: true,
+        });
+      } else {
+        setDimensions({
+          width: 500,
+          height: 400,
+          isMobile: false,
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
   const plotData = useMemo((): PlotData => {
     const pca = new SimplePCA();
     
@@ -146,9 +170,9 @@ export default function KNNScatterPlot({ knnInfo, queryPoint }: KNNScatterPlotPr
     };
   }, [knnInfo, queryPoint]);
 
-  const width = 500;
-  const height = 400;
-  const margin = 40;
+  const width = dimensions.width;
+  const height = dimensions.height;
+  const margin = dimensions.isMobile ? 35 : 40;
   
   const plotWidth = width - 2 * margin;
   const plotHeight = height - 2 * margin;
@@ -166,14 +190,14 @@ export default function KNNScatterPlot({ knnInfo, queryPoint }: KNNScatterPlotPr
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full bg-white rounded-lg border border-slate-200 p-6 mt-6"
+      className="w-full bg-white rounded-lg border border-slate-200 p-4 md:p-6 mt-6"
     >
-      <h4 className="font-bold text-slate-900 mb-4">📊 KNN Clustering Visualization (PCA 2D)</h4>
+      <h4 className="font-bold text-slate-900 mb-4 text-sm md:text-base">📊 KNN Clustering Visualization (PCA 2D)</h4>
       
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col gap-4 md:gap-6">
         {/* SVG Plot */}
-        <div className="flex-1">
-          <svg width={width} height={height} className="border border-slate-200 rounded bg-slate-50">
+        <div className="flex justify-center md:flex-1 overflow-x-auto">
+          <svg width={width} height={height} className="border border-slate-200 rounded bg-slate-50 flex-shrink-0">
             {/* Grid lines */}
             {[0, 0.25, 0.5, 0.75, 1].map(i => (
               <g key={`grid-${i}`} opacity={0.1}>
@@ -279,7 +303,7 @@ export default function KNNScatterPlot({ knnInfo, queryPoint }: KNNScatterPlotPr
                   x={xScale(point.x) + 10}
                   y={yScale(point.y) - 8}
                   textAnchor="middle"
-                  fontSize={11}
+                  fontSize={dimensions.isMobile ? 9 : 11}
                   fontWeight="bold"
                   fill="black"
                 >
@@ -289,38 +313,38 @@ export default function KNNScatterPlot({ knnInfo, queryPoint }: KNNScatterPlotPr
             ))}
 
             {/* Axis labels */}
-            <text x={width - margin + 10} y={height - margin + 5} fontSize={12} fill="gray">
+            <text x={width - margin + 5} y={height - margin + 5} fontSize={dimensions.isMobile ? 10 : 12} fill="gray">
               PC1
             </text>
-            <text x={margin - 25} y={margin - 10} fontSize={12} fill="gray">
+            <text x={margin - 20} y={margin - 5} fontSize={dimensions.isMobile ? 10 : 12} fill="gray">
               PC2
             </text>
           </svg>
         </div>
 
         {/* Legend */}
-        <div className="flex-1 min-w-[200px]">
+        <div className="w-full md:flex-1">
           <div className="space-y-3">
             {/* Query point legend */}
             <div className="flex items-center gap-2">
-              <svg width={20} height={20}>
-                <circle cx={10} cy={10} r={5} fill="none" stroke="#0ea5e9" strokeWidth={2} />
+              <svg width={16} height={16}>
+                <circle cx={8} cy={8} r={4} fill="none" stroke="#0ea5e9" strokeWidth={2} />
               </svg>
-              <span className="text-xs text-slate-700">Query Point (Input Gambar)</span>
+              <span className="text-xs md:text-sm text-slate-700">Query Point (Input Gambar)</span>
             </div>
 
             {/* Class legend */}
             <div className="border-t border-slate-200 pt-2">
               <p className="text-xs font-semibold text-slate-700 mb-2">Classes ({Array.from(classCount.keys()).length}):</p>
-              <div className="space-y-1 max-h-64 overflow-y-auto">
+              <div className="grid grid-cols-2 gap-2 md:space-y-1 max-h-64 overflow-y-auto">
                 {Array.from(classCount.entries()).map(([className, count]) => (
                   <div key={className} className="flex items-center gap-2 text-xs">
                     {/* eslint-disable-next-line */}
                     <div
-                      className="w-3 h-3 rounded-full"
+                      className="w-2 h-2 md:w-3 md:h-3 rounded-full flex-shrink-0"
                       style={{ backgroundColor: CLASS_COLORS[className] || '#ccc' }}
                     />
-                    <span className="text-slate-700">
+                    <span className="text-slate-700 truncate">
                       {className.replace(/_/g, ' ')} ({count})
                     </span>
                   </div>
@@ -345,12 +369,12 @@ export default function KNNScatterPlot({ knnInfo, queryPoint }: KNNScatterPlotPr
                         <div key={`neighbor-info-${point.neighborIndex}`} className="flex items-center gap-2 text-xs">
                           {/* eslint-disable-next-line */}
                           <span
-                            className="w-5 h-5 rounded-full flex items-center justify-center text-white font-bold text-xs"
+                            className="w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0"
                             style={{ backgroundColor: badgeColor }}
                           >
                             {point.neighborIndex + 1}
                           </span>
-                          <span className="text-slate-700">
+                          <span className="text-slate-700 truncate">
                             {point.className.replace(/_/g, ' ')}
                           </span>
                         </div>
@@ -364,9 +388,8 @@ export default function KNNScatterPlot({ knnInfo, queryPoint }: KNNScatterPlotPr
       </div>
 
       {/* Info text */}
-      <p className="text-xs text-slate-600 mt-4">
-        Visualisasi di atas menunjukkan distribusi 45 training profiles dalam ruang 2D (direduksi dari 9D menggunakan PCA). 
-        Query point menunjukkan input gambar Anda, dan K=3 nearest neighbors ditandai dengan badge peringkat.
+      <p className="text-xs text-slate-600 mt-4 leading-relaxed">
+        Visualisasi menunjukkan distribusi 45 training profiles dalam ruang 2D (direduksi dari 9D menggunakan PCA). K=3 nearest neighbors ditandai dengan badge peringkat.
       </p>
     </motion.div>
   );
